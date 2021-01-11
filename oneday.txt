@@ -1,0 +1,6 @@
+1.安装i3wm
+2.卸载FireFox国际版
+2.下载Firefox国内版
+3.配置完全Markdown
+4.配置完全Vim-tab   blablabla
+5.git仓库
