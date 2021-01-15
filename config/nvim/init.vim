@@ -33,23 +33,23 @@ let g:NERDTreeDirArrowCollapsible='-'
 let NERDTreeMinimalUI=1
 let NERDTreeShowBookmarks=0
 let NERDTreeIgnore=['\.lnk']
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 "===========plugin=============
 call plug#begin()
     Plug 'yegappan/mru'
     Plug 'itchyny/lightline.vim'
     Plug 'preservim/nerdtree'
     Plug 'connorholyday/vim-snazzy'
-    Plug 'iamcco/markdown-preview.vim'
     Plug 'dhruvasagar/vim-table-mode'
 call plug#end()
 
 color snazzy
-"==============end==============
-" Compile function
+"========Compile function=======
 map r :call CompileRunGcc()<CR>
 func! CompileRunGcc()
     exec "w"
-    if &filetype == 'markdown'
-        exec "MarkdownPreview"
+    if &filetype == 'python'
+        exec "!time python3 %"
     endif
 endfunc
+"==============end==============
