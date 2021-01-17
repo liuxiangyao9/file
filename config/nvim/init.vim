@@ -1,15 +1,23 @@
-"============basis==============
-inoremap jk <Esc>
-map s <nop>
+" =========
+" 基础设置
+" =========
+
+map s :MRU<CR>
 map S :w<CR>
 map Q :q<CR>
-map R :source $MYVIMRC<CR>
-"============set==============
+noremap t :call CompileRunGcc()<CR>
+map T :source $MYVIMRC<CR>
+map <F2> :NERDTreeToggle<CR>
+
 set number
+syntax on
 set hlsearch
 exec "nohlsearch"
+set guicursor=i:block
 set ignorecase
 set wildmenu
+set history=400
+set listchars=tab:»■,trail:■
 
 set nocompatible
 set backspace=indent,eol,start
@@ -19,12 +27,26 @@ set autoindent
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-"==========plugin_set==========
+
+" =========
+" 插件设置
+" =========
+
+" vim-plug
+call plug#begin()
+    Plug 'yegappan/mru'
+    Plug 'itchyny/lightline.vim'
+    Plug 'preservim/nerdtree'
+    Plug 'connorholyday/vim-snazzy'
+    Plug 'dhruvasagar/vim-table-mode'
+    Plug 'tpope/vim-markdown'
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+call plug#end()
+
 " transparent
 let g:SnazzyTransparent = 1
 
 " NERDTreeConfig
-map <F2> :NERDTreeToggle<CR>
 let g:NERDTreeHidden=0
 let g:NERDTreeWinSize=16
 let g:NERDTreeShowLineNumbers=0
@@ -34,23 +56,19 @@ let NERDTreeMinimalUI=1
 let NERDTreeShowBookmarks=0
 let NERDTreeIgnore=['\.lnk']
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-"===========plugin=============
-call plug#begin()
-    Plug 'yegappan/mru'
-    Plug 'itchyny/lightline.vim'
-    Plug 'preservim/nerdtree'
-    Plug 'connorholyday/vim-snazzy'
-    Plug 'dhruvasagar/vim-table-mode'
-call plug#end()
 
-color snazzy
-"========Compile function=======
-noremap r :call CompileRunGcc()<CR>
+" =========
+" 一键运行
+" =========
+
 func! CompileRunGcc()
 	exec "w"
-	if &filetype == 'c'
-		exec "!g++ % -o %<"
-		exec "!time ./%<"
+    if &filetype == 'c'
+        if !isdirectory('build')
+            execute "!mkdir build"
+        endif
+        execute "!gcc % -o build/%<"
+        execute "!time ./build/%<"
 	elseif &filetype == 'cpp'
 		set splitbelow
 		exec "!g++ -std=c++11 % -Wall -o %<"
@@ -74,4 +92,3 @@ func! CompileRunGcc()
 		:term export DEBUG="INFO,ERROR,WARNING"; node --trace-warnings .
 	endif
 endfunc
-"==============end==============
